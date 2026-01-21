@@ -22,7 +22,7 @@ WHERE tts.rnk <=3
 ORDER BY 1, 3 DESC, 2;
 
 
---Q.2 https://datalemur.com/questions/time-spent-snaps
+-- Q.2 https://datalemur.com/questions/time-spent-snaps
 """
     EXPLANATION:
         - This is interesting question, First, I filtered only the required activity_type then combined both activities and age_breakdown tables then it's all about CONDITIONAL GROUP BY SUM CASE type where you have to aggregate the results based on certain conditions!
@@ -38,4 +38,41 @@ WHERE a.activity_type IN ('open', 'send')
 GROUP BY ab.age_bucket;
 
 
---Q.3 
+-- Q.3 https://datalemur.com/questions/sql-third-transaction
+"""
+    EXPLANATION:
+        - Since, we don't care about DUPLICATES here
+        - ROW_NUMBER() is used, we assign a RANK FOR EACH USER means PARTITION BY user
+        - THIRD Transaction means ORDER BY transaction_date and FILTER THE RESULTS
+"""
+WITH third_transaction AS (
+  SELECT
+    *,
+    ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY transaction_date) AS rnk
+  FROM transactions
+)
+SELECT
+  user_id,
+  spend,
+  transaction_date
+FROM third_transaction
+WHERE rnk = 3;
+
+-- Q.4 https://datalemur.com/questions/sql-second-highest-salary
+"""
+    EXPLANATION:
+        - THE HOTTEST QUESTION OF THE INTERVIEWS, n-highest salary!
+        - In this question, we are concerned about Duplicates so DENSE_RANK() comes into the picture, Since it's not department wise, we should not be using Partitioning
+        - Just ORDER BY salary DESC as we SECOND HIGHEST and Filter the results!
+"""
+WITH second_highest AS (
+  SELECT
+    *,
+    DENSE_RANK() OVER(ORDER BY salary DESC) AS rnk
+  FROM employee
+)
+SELECT
+  salary AS second_highest_salary
+FROM second_highest
+WHERE rnk = 2
+LIMIT 1;

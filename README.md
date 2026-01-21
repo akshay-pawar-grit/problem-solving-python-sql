@@ -42,6 +42,8 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 |---|---------|--------------|
 | 1 | [Top Three Salaries](https://datalemur.com/questions/sql-top-three-salaries) | DENSE_RANK, Window Functions, CTEs |
 | 2 | [Time Spent on Snaps](https://datalemur.com/questions/time-spent-snaps) | Conditional Aggregation, CASE, JOINs |
+| 3 | [Third Transaction](https://datalemur.com/questions/sql-third-transaction) | ROW_NUMBER, Window Functions, CTEs |
+| 4 | [Second Highest Salary](https://datalemur.com/questions/sql-second-highest-salary) | DENSE_RANK, Window Functions, CTEs |
 
 ## Local SQL Testing
 
