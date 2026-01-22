@@ -76,3 +76,43 @@ SELECT
 FROM second_highest
 WHERE rnk = 2
 LIMIT 1;
+
+-- Q.5 https://datalemur.com/questions/rolling-average-tweets
+"""
+    EXPLANATION:
+        - It's very simple question, if you understand two fundamentals very clearly,
+            a. You are clear about the ROLLING function, SUM(), AVG() OVER()
+            b. You understand the WINDOW'S BOUNDING, N PRECEDING, CURRENT ROW AND N FOLLOWING
+"""
+SELECT
+  user_id,
+  tweet_date,
+  ROUND(AVG(tweet_count) OVER(PARTITION BY user_id ORDER BY tweet_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW),2) AS rolling_avg_3d
+FROM tweets;
+
+-- Q.6 https://datalemur.com/questions/sql-highest-grossing
+"""
+    EXPLANATION:
+        - This question is a variant of RANKING ANALYTICAL Questions but we have to make one aggregation before that makes it little lengthy!
+"""
+WITH highest_spend_products AS (
+ SELECT
+  category,
+  product,
+  SUM(spend) AS total_spend
+ FROM product_spend
+ WHERE EXTRACT(YEAR FROM transaction_date) = 2022
+ GROUP BY category, product
+),
+top_two_products AS (
+  SELECT
+    *,
+    ROW_NUMBER() OVER(PARTITION BY category ORDER BY total_spend DESC) AS rnk
+  FROM highest_spend_products
+)
+SELECT
+  category,
+  product,
+  total_spend
+FROM top_two_products
+WHERE rnk <= 2;

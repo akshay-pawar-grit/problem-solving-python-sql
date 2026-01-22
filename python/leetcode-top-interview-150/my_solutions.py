@@ -23,8 +23,22 @@ class Solution:
             h += citation_count[i]
             if h >= i:
                 return i
+    
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        prefix = suffix = 1
+        answer = [0] * len(nums)
+
+        for i in range(len(nums)):
+            answer[i] = prefix
+            prefix *= nums[i]
+
+        for j in range(len(nums)-1, -1, -1):
+            answer[j] *= suffix
+            suffix *= nums[j]
+        
+        return answer
 
 
 if __name__ == "__main__":
     sol = Solution()
-    print(sol.hIndex([1, 2, 3, 4, 5]))
+    #print(sol.hIndex([1, 2, 3, 4, 5]))

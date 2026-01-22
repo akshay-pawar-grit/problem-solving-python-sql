@@ -29,6 +29,7 @@ Solutions to problems from [LeetCode's Top Interview 150](https://leetcode.com/s
 | # | Problem | Difficulty |
 |---|---------|------------|
 | 1 | H-Index | Medium |
+| 2 | Product of Array Except Self | Medium |
 
 ### SQL - DataLemur
 
@@ -44,6 +45,8 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 2 | [Time Spent on Snaps](https://datalemur.com/questions/time-spent-snaps) | Conditional Aggregation, CASE, JOINs |
 | 3 | [Third Transaction](https://datalemur.com/questions/sql-third-transaction) | ROW_NUMBER, Window Functions, CTEs |
 | 4 | [Second Highest Salary](https://datalemur.com/questions/sql-second-highest-salary) | DENSE_RANK, Window Functions, CTEs |
+| 5 | [Rolling Average Tweets](https://datalemur.com/questions/rolling-average-tweets) | Window Functions, ROWS BETWEEN, Rolling Aggregates |
+| 6 | [Highest Grossing](https://datalemur.com/questions/sql-highest-grossing) | ROW_NUMBER, Window Functions, CTEs, Aggregation |
 
 ## Local SQL Testing
 
