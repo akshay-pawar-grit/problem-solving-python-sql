@@ -116,3 +116,58 @@ SELECT
   total_spend
 FROM top_two_products
 WHERE rnk <= 2;
+
+-- Q.6 https://datalemur.com/questions/signup-confirmation-rate
+"""
+  EXPLANATION:
+    - We have two tables here, emails and texts, since we have to find the activation rate, we must have to use the LEFT join on emails table to get the overall idea about the total records but for texts, we can apply the early filtering to get only the confirmed signup_records
+    -  Next step, is to join the tables, I am using LEFT join to get all the records and not the matching ones
+    - Then, I used SUM CASE to count the confirmed records and got the ratio
+"""
+WITH confirmed AS (
+  SELECT
+    email_id,
+    signup_action
+  FROM texts
+  WHERE signup_action = 'Confirmed'
+)
+SELECT
+  ROUND(SUM(CASE WHEN c.signup_action = 'Confirmed' THEN 1 ELSE 0 END)::NUMERIC / COUNT(e.email_id), 2) AS activation_rate
+FROM emails e 
+LEFT JOIN confirmed c 
+ON e.email_id = c.email_id;
+
+-- Q.7 https://datalemur.com/questions/spotify-streaming-history
+"""
+  EXPLANATION:
+    - The thought process is simple, we have songs_history table which has historical data and songs_weekly which has current week records, let's first filter the records upto 4th August 2022 and aggregate the count based on user and song
+    - Union the current week records with the historical data to get the combined user_id and song_id combo and then aggregate based on user_id and song_id to get the required answer
+"""
+WITH songs_weekly_agg AS (
+  SELECT
+    user_id,
+    song_id,
+    COUNT(song_id) AS song_plays
+  FROM songs_weekly
+  WHERE listen_time <= '08/04/2022 23:59:59'
+  GROUP BY user_id, song_id
+), combined AS (
+  SELECT
+    user_id,
+    song_id,
+    song_plays
+  FROM songs_weekly_agg
+  UNION ALL
+  SELECT
+    user_id,
+    song_id,
+    song_plays
+  FROM songs_history
+)
+SELECT
+  user_id,
+  song_id,
+  SUM(song_plays) AS song_count
+FROM combined
+GROUP BY user_id, song_id
+ORDER BY 3 DESC;
