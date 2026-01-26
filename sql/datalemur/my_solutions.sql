@@ -171,3 +171,44 @@ SELECT
 FROM combined
 GROUP BY user_id, song_id
 ORDER BY 3 DESC;
+
+-- Q.8 https://datalemur.com/questions/supercloud-customer
+"""
+  EXPLANATION:
+    - Join customer_contracts table with products to get the complete data
+    - Filter the records on product_category to have only the required categories
+    - Aggregate the records and apply HAVING CLAUSE on DISTINCT product_category of each customer should be equal to the DISTINCT count of each product_category
+"""
+SELECT
+  cc.customer_id
+FROM customer_contracts cc
+INNER JOIN products prd
+ON cc.product_id = prd.product_id
+WHERE prd.product_category IN ('Analytics', 'Containers', 'Compute')
+GROUP BY cc.customer_id
+HAVING(COUNT( DISTINCT prd.product_category)) = (SELECT COUNT(DISTINCT product_category) FROM products);
+
+-- Q.9 https://datalemur.com/questions/odd-even-measurements
+"""
+  EXPLANATION:
+    - First thing to focus on is to get the DATE from TIMESTAMP measurement_time column
+    - We need ODD and Even Numbers so we must assign the rank to each record
+    - Used ROW_NUMBER() to assign that PARTITION BY Date to match the quetstion's requirements
+    - For Ranking Questions, we filter the ranks but in this case we need to use that rnk column to determine which category the record belongs to
+    - Used conditional summing using CASE SUM and got the results!
+"""
+WITH ranked AS ( 
+  SELECT
+  CAST(measurement_time AS DATE) AS measurement_day,
+  measurement_value,
+  ROW_NUMBER() OVER(PARTITION BY CAST(measurement_time AS DATE) ORDER BY measurement_time) AS rnk
+FROM measurements
+)
+
+SELECT
+  measurement_day,
+  SUM(CASE WHEN rnk % 2 = 1 THEN measurement_value END) AS odd_sum,
+  SUM(CASE WHEN rnk % 2 = 0 THEN measurement_value END) AS even_sum
+FROM ranked
+GROUP BY 1
+ORDER BY 1;
