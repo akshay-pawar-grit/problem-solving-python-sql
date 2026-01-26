@@ -49,6 +49,8 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 6 | [Highest Grossing](https://datalemur.com/questions/sql-highest-grossing) | ROW_NUMBER, Window Functions, CTEs, Aggregation |
 | 7 | [Signup Confirmation Rate](https://datalemur.com/questions/signup-confirmation-rate) | LEFT JOIN, Conditional Aggregation, CTEs |
 | 8 | [Spotify Streaming History](https://datalemur.com/questions/spotify-streaming-history) | UNION ALL, CTEs, Aggregation, Date Filtering |
+| 9 | [Supercloud Customer](https://datalemur.com/questions/supercloud-customer) | JOIN, GROUP BY, HAVING, Subqueries |
+| 10 | [Odd Even Measurements](https://datalemur.com/questions/odd-even-measurements) | ROW_NUMBER, Window Functions, Conditional Aggregation, CTEs |
 
 ## Local SQL Testing
 
