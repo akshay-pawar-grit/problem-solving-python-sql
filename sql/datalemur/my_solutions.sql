@@ -212,3 +212,60 @@ SELECT
 FROM ranked
 GROUP BY 1
 ORDER BY 1;
+
+-- Q.10 https://datalemur.com/questions/sql-swapped-food-delivery
+"""
+  EXPLANATION:
+    - Very Tasty Question hehe
+    - Simple Question, We just need to swap the order_id of odd to even and even to odd with the only condition of the last record if odd, don't do anything
+    - How to achieve it, Use CASE WHEN, if odd make it even by adding +1 and -1 for vice versa
+"""
+WITH corrected AS (
+  SELECT 
+    *,
+    CASE WHEN order_id % 2 = 1 AND order_id = (SELECT MAX(order_id) FROM orders) THEN order_id
+      WHEN order_id % 2 = 1 THEN order_id + 1
+      WHEN order_id % 2 = 0 THEN order_id - 1
+    END AS corrected_order_id
+  FROM orders 
+)
+SELECT
+  corrected_order_id,
+  item
+FROM corrected
+ORDER BY corrected_order_id;
+
+-- Q.11 https://datalemur.com/questions/sql-bloomberg-stock-min-max-1
+"""
+  EXPLANATION:
+  - ranked the results based on the highest and lowest value, how to get both? Simple, Use this trick of using ROW_NUMBER() OVER(ORDER BY col_name) to get the lowest value and ROW_NUMBER() OVER(ORDER BY same_col_name DESC) to get the highest value
+  - Filtered the records which are having value 1
+  - Performed Self Join to get what is being asked in the question, key thing, see the join condition, ON f1.ticker = f2.ticker AND f1.open < f2.open
+"""
+WITH ranked AS (
+SELECT
+  to_char(date, 'Mon-YYYY') AS mth,
+  ticker,
+  open,
+  ROW_NUMBER() OVER(PARTITION BY ticker ORDER BY open) AS l_rn,
+  ROW_NUMBER() OVER(PARTITION BY ticker ORDER BY open DESC) AS h_rn
+FROM stock_prices
+),
+filtered AS (
+SELECT
+  mth,
+  ticker,
+  open
+FROM ranked
+WHERE l_rn = 1 OR h_rn = 1
+)
+SELECT
+  f1.ticker,
+  f2.mth AS highest_mth,
+  f2.open AS highest_open,
+  f1.mth AS lowest_mth,
+  f1.open AS lowest_open
+FROM filtered f1
+INNER JOIN filtered f2
+ON f1.ticker = f2.ticker AND f1.open < f2.open
+ORDER BY ticker;
