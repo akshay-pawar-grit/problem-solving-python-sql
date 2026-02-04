@@ -269,3 +269,42 @@ FROM filtered f1
 INNER JOIN filtered f2
 ON f1.ticker = f2.ticker AND f1.open < f2.open
 ORDER BY ticker;
+
+-- Q.12 https://datalemur.com/questions/amazon-shopping-spree
+"""
+  EXPLANATION:
+    - Ranked the customers to find how many transactions are made by each one
+    - Filtered the user_id with rank greater than equal to 3
+"""
+WITH ranked AS (
+  SELECT 
+    user_id,
+    ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY transaction_date) AS rnk
+  FROM transactions
+)
+SELECT
+  DISTINCT user_id
+FROM ranked
+WHERE rnk >=3;
+
+-- Q.13 https://datalemur.com/questions/histogram-users-purchases
+"""
+  EXPLANATION:
+  - Found the recent transaction_date but used DENSE_RANK as we need multiple records for the same user
+  - Next was just a simple aggregation with date and user_id!
+"""
+
+WITH latest_transaction AS (
+  SELECT
+    transaction_date,
+    user_id,
+    DENSE_RANK() OVER(PARTITION BY user_id ORDER BY transaction_date DESC) AS rnk
+  FROM user_transactions
+)
+SELECT
+  transaction_date,
+  user_id,
+  COUNT(user_id) AS purchase_count
+FROM latest_transaction 
+WHERE rnk = 1
+GROUP BY transaction_date, user_id;

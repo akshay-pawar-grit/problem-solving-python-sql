@@ -53,6 +53,8 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 10 | [Odd Even Measurements](https://datalemur.com/questions/odd-even-measurements) | ROW_NUMBER, Window Functions, Conditional Aggregation, CTEs |
 | 11 | [Swapped Food Delivery](https://datalemur.com/questions/sql-swapped-food-delivery) | CASE WHEN, Conditional Logic, Subqueries |
 | 12 | [Bloomberg Stock Min Max](https://datalemur.com/questions/sql-bloomberg-stock-min-max-1) | ROW_NUMBER, Window Functions, Self Join, to_char |
+| 13 | [Amazon Shopping Spree](https://datalemur.com/questions/amazon-shopping-spree) | ROW_NUMBER, Window Functions, DISTINCT |
+| 14 | [Histogram Users Purchases](https://datalemur.com/questions/histogram-users-purchases) | DENSE_RANK, Window Functions, Aggregation |
 
 ## Local SQL Testing
 
