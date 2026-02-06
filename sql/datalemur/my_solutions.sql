@@ -308,3 +308,70 @@ SELECT
 FROM latest_transaction 
 WHERE rnk = 1
 GROUP BY transaction_date, user_id;
+
+-- Q.14 https://datalemur.com/questions/uncategorized-calls-percentage
+"""
+  EXPLANATION:
+    - Basic CONDITIONAL SUM question, Used CASE WHEN SUM to find the NA or NULLs
+"""
+SELECT
+  ROUND((SUM(CASE WHEN call_category = 'n/a' OR call_category IS NULL THEN 1 ELSE 0 END)::NUMERIC /
+   COUNT(*)) * 100,1) AS uncategorised_call_pct
+FROM 
+  callers;
+
+-- Q.15 https://datalemur.com/questions/international-call-percentage
+"""
+  EXPLANATION:
+     - This is interesting one, My thought process was if we have to know the international call, first we need to bring them to one column
+     - So I joined phone_calls table with phone_info on caller_id
+     - Next, I joined this combined table again with phone_info on receiver_id
+     - Then, it was a simple SUM CASE WHEN to filter the countries which are not same
+"""
+WITH caller_combined AS (
+  SELECT
+    pc.caller_id,
+    pc.receiver_id,
+    pi.country_id
+  FROM phone_calls pc
+  LEFT JOIN phone_info pi
+  ON pc.caller_id = pi.caller_id
+)
+SELECT
+  ROUND(SUM(CASE WHEN cc.country_id <> pi.country_id THEN 1 ELSE 0 END)::NUMERIC /
+          (SELECT COUNT(caller_id) FROM phone_calls) * 100.0,1) AS international_calls_pct
+FROM caller_combined cc
+LEFT JOIN phone_info pi
+ON cc.receiver_id = pi.caller_id;
+
+-- Q.16 https://datalemur.com/questions/card-launch-success
+"""
+  EXPLANATION:
+    - The question is very simple if you understand how windows function works
+    - Used ROW_NUMBER() PARTITION BY card_name and ORDER BY year, month as we need the latest card
+"""
+WITH ordered AS (
+  SELECT
+    card_name,
+    issued_amount,
+    ROW_NUMBER() OVER(PARTITION BY card_name ORDER BY issue_year,issue_month) AS rnk
+  FROM monthly_cards_issued
+)
+
+SELECT
+  card_name,
+  issued_amount
+FROM ordered
+WHERE rnk=1
+ORDER BY issued_amount DESC;
+
+-- Q.17 https://datalemur.com/questions/alibaba-compressed-mode
+"""
+  EXPLANATION:
+    - Probably the easiest medium question
+    - As like AI hallucinate, I hallucinate with simple questions which are categorised as medium, Overthinked and realised its just a simple filtering question LOL
+"""
+SELECT 
+  item_count AS mode
+FROM items_per_order
+WHERE order_occurrences = (SELECT MAX(order_occurrences) FROM items_per_order);

@@ -55,6 +55,10 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 12 | [Bloomberg Stock Min Max](https://datalemur.com/questions/sql-bloomberg-stock-min-max-1) | ROW_NUMBER, Window Functions, Self Join, to_char |
 | 13 | [Amazon Shopping Spree](https://datalemur.com/questions/amazon-shopping-spree) | ROW_NUMBER, Window Functions, DISTINCT |
 | 14 | [Histogram Users Purchases](https://datalemur.com/questions/histogram-users-purchases) | DENSE_RANK, Window Functions, Aggregation |
+| 15 | [Uncategorized Calls Percentage](https://datalemur.com/questions/uncategorized-calls-percentage) | Conditional Aggregation, CASE WHEN |
+| 16 | [International Call Percentage](https://datalemur.com/questions/international-call-percentage) | JOINs, CASE WHEN, Conditional Aggregation |
+| 17 | [Card Launch Success](https://datalemur.com/questions/card-launch-success) | ROW_NUMBER, Window Functions |
+| 18 | [Alibaba Compressed Mode](https://datalemur.com/questions/alibaba-compressed-mode) | Subqueries, Filtering |
 
 ## Local SQL Testing
 
