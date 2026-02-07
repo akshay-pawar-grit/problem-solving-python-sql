@@ -401,3 +401,21 @@ ON ua.user_id = ju.user_id AND
   ua.event_date <  ju.july_event_date AND
   ua.event_date >= ju.july_event_date - INTERVAL '1 month'
 GROUP BY 1;
+
+-- Q.19
+"""
+  EXPLANATION:
+    - The last question was Monthly Active Users, this is another Growth Accounting Question, YoY
+    - Used the LAG function to compare the previous spend
+    - Rest is the simple calculations
+    - This is not HARD Level Question for sure!
+"""
+SELECT 
+  EXTRACT(YEAR FROM transaction_date) AS year,
+  product_id,
+  spend AS curr_year_spend,
+  LAG(spend, 1) OVER ( PARTITION BY product_id ORDER BY EXTRACT(YEAR FROM transaction_date)) AS prev_year_spend,
+  ROUND(((spend - LAG(spend, 1) OVER ( PARTITION BY product_id ORDER BY EXTRACT(YEAR FROM transaction_date))) 
+   / LAG(spend, 1) OVER ( PARTITION BY product_id ORDER BY EXTRACT(YEAR FROM transaction_date))) * 100,2) AS yoy_rate
+FROM user_transactions;
+

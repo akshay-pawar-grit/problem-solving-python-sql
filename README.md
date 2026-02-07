@@ -60,6 +60,7 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 17 | [Card Launch Success](https://datalemur.com/questions/card-launch-success) | ROW_NUMBER, Window Functions |
 | 18 | [Alibaba Compressed Mode](https://datalemur.com/questions/alibaba-compressed-mode) | Subqueries, Filtering |
 | 19 | [User Retention](https://datalemur.com/questions/user-retention) | Self Join, CTEs, Date Filtering, INTERVAL |
+| 20 | [Y-on-Y Growth Rate](https://datalemur.com/questions/yoy-growth-rate) | LAG, Window Functions, YoY Calculations |
 
 ## Local SQL Testing
 
