@@ -375,3 +375,29 @@ SELECT
   item_count AS mode
 FROM items_per_order
 WHERE order_occurrences = (SELECT MAX(order_occurrences) FROM items_per_order);
+
+-- Q.18 https://datalemur.com/questions/user-retention
+"""
+  EXPLANATION:
+    -  I first filtered the records only for July 2022 but I saw there are multiple records so I chose the MIN event_time which I will explain further why
+    - My idea was that if I get the july_users and I combined that with the user_actions on user_id and event_date should be of the 1 month interval to get the June Records which is the actual ask of the question
+    - But, one problem I faced that I am using SELF JOIN so the records of the JULY month itself were getting joined, resulting into the incorrect count so I used MIN(event_date) to filter that records 
+"""
+WITH july_users AS (
+  SELECT 
+    user_id,
+    MIN(event_date) AS july_event_date
+  FROM user_actions
+  WHERE EXTRACT(YEAR FROM event_date) = 2022 AND EXTRACT(MONTH FROM event_date) = 7
+  GROUP BY user_id
+)
+
+SELECT 
+    EXTRACT(MONTH FROM ju.july_event_date) AS month,
+    COUNT(DISTINCT ju.user_id) AS monthly_active_users
+FROM july_users ju
+JOIN user_actions ua
+ON ua.user_id = ju.user_id AND 
+  ua.event_date <  ju.july_event_date AND
+  ua.event_date >= ju.july_event_date - INTERVAL '1 month'
+GROUP BY 1;
