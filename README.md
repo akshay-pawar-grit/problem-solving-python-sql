@@ -61,6 +61,7 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 18 | [Alibaba Compressed Mode](https://datalemur.com/questions/alibaba-compressed-mode) | Subqueries, Filtering |
 | 19 | [User Retention](https://datalemur.com/questions/user-retention) | Self Join, CTEs, Date Filtering, INTERVAL |
 | 20 | [Y-on-Y Growth Rate](https://datalemur.com/questions/yoy-growth-rate) | LAG, Window Functions, YoY Calculations |
+| 21 | [Prime Warehouse Storage](https://datalemur.com/questions/prime-warehouse-storage) | CASE WHEN, FLOOR, UNION ALL, CTEs, Conditional Aggregation |
 
 ## Local SQL Testing
 

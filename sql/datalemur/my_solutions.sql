@@ -419,3 +419,38 @@ SELECT
    / LAG(spend, 1) OVER ( PARTITION BY product_id ORDER BY EXTRACT(YEAR FROM transaction_date))) * 100,2) AS yoy_rate
 FROM user_transactions;
 
+-- Q.20 https://datalemur.com/questions/prime-warehouse-storage
+"""
+  EXPLANATION:
+     - Took me a lot of time to just go through the question as it's long and confusing
+     - But after staring at it for 30 mins like that's the only partner I have in this Valentine's week, I realised the ask is simple, count the total prime_area, count the total prime_area items, count the total non_prime_area and non_prime items
+     - Since, the priority is to be given to the prime items, I calculated the max_area for prime items and see how many prime items can fit in
+     - Once that is done, it's all about the remaining area and how many non prime items can be accommodated
+"""
+WITH aggregated AS (
+SELECT
+  SUM(CASE WHEN item_type = 'prime_eligible' THEN square_footage END) AS prime_sum,
+  SUM(CASE WHEN item_type = 'not_prime' THEN square_footage END) AS not_prime_sum,
+  SUM(CASE WHEN item_type = 'prime_eligible' THEN 1 ELSE 0 END) AS prime_cnt,
+  SUM(CASE WHEN item_type = 'not_prime' THEN 1 ELSE 0 END) AS not_prime_cnt
+FROM inventory
+),
+
+prime_area AS (
+  SELECT
+    FLOOR(500000/prime_sum) * prime_sum as prime_max_area
+  FROM aggregated
+)
+
+SELECT
+  'prime_eligible' AS item_type,
+  FLOOR(500000/prime_sum) * prime_cnt AS item_count
+FROM aggregated
+
+UNION ALL
+
+SELECT 
+  'not_prime' AS item_type,
+  FLOOR((500000 - (SELECT prime_max_area FROM prime_area)) / not_prime_sum) * not_prime_cnt
+FROM aggregated;
+
