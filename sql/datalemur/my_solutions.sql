@@ -480,3 +480,28 @@ SELECT
   FULL OUTER JOIN daily_pay dp 
   ON a.user_id = dp.user_id
 ORDER BY 1;
+
+-- Q.22 https://datalemur.com/questions/consecutive-filing-years
+"""
+  EXPLANATION:
+  - Consecutive Year question and the first thought comes, it should be something from LEAD or LAG
+  - The question is simple, we need to find the user IDs with TurboTax, so I filtered the records for TurboTax first
+  - The core logic is simple, You need to find for 3 consecutive years so, I am going to calculate the next year and next_year + 1 using LEAD function
+  - OVER CLAUSE logic is simple, PARTITION BY user_id, ORDER BY filing_date
+  - Now, the filter logic is just this, second_filing_year should be filing_year + 1 and third_filing_year should be filing_year + 2, for eg, 2019, 2020 and 2021
+"""
+WITH consecutives AS (
+  SELECT
+    user_id,
+    EXTRACT(YEAR FROM filing_date) AS first_filing_year,
+    LEAD(EXTRACT(YEAR FROM filing_date), 1) OVER(PARTITION BY user_id ORDER BY filing_date) AS second_filing_year,
+    LEAD(EXTRACT(YEAR FROM filing_date), 2) OVER(PARTITION BY user_id ORDER BY filing_date) AS third_filing_year
+  FROM filed_taxes
+  WHERE product LIKE 'TurboTax%'
+)
+
+SELECT
+  DISTINCT user_id
+FROM consecutives
+WHERE second_filing_year = first_filing_year + 1 AND 
+  third_filing_year = first_filing_year + 2;

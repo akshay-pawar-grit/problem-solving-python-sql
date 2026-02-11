@@ -63,6 +63,7 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 20 | [Y-on-Y Growth Rate](https://datalemur.com/questions/yoy-growth-rate) | LAG, Window Functions, YoY Calculations |
 | 21 | [Prime Warehouse Storage](https://datalemur.com/questions/prime-warehouse-storage) | CASE WHEN, FLOOR, UNION ALL, CTEs, Conditional Aggregation |
 | 22 | [Updated Status](https://datalemur.com/questions/updated-status) | FULL OUTER JOIN, COALESCE, CASE WHEN, Growth Accounting |
+| 23 | [Consecutive Filing Years](https://datalemur.com/questions/consecutive-filing-years) | LEAD, Window Functions, LIKE, Consecutive Logic |
 
 ## Local SQL Testing
 
