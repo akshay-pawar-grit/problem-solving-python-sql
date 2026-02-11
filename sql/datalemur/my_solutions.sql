@@ -505,3 +505,34 @@ SELECT
 FROM consecutives
 WHERE second_filing_year = first_filing_year + 1 AND 
   third_filing_year = first_filing_year + 2;
+
+-- Q.23 https://datalemur.com/questions/marketing-touch-streak
+"""
+  EXPLANATION:
+  - Just like my previous solved question, the concept is same, it was years in the previous question and weeks in this one
+  - This question has an additional condition of marketing touch of the type trial_request
+  - I could have used aggregation + filtering but thought of using aggregation function over the windows clause to kind of having the flag
+  - Rest is simple filtering on two conditions, first weeks and then the type flag
+  - Joined the filtered CTE on crm_contacts table to get the mails
+"""
+WITH required AS (
+  SELECT
+    contact_id,
+    EXTRACT(WEEK FROM event_date) AS first_week,
+    LEAD(EXTRACT(WEEK FROM event_date), 1) OVER(PARTITION BY contact_id ORDER BY event_date) AS second_week,
+    LEAD(EXTRACT(WEEK FROM event_date), 2) OVER(PARTITION BY contact_id ORDER BY event_date) AS third_week,
+    MAX(CASE WHEN event_type = 'trial_request' THEN 1 ELSE 0 END) OVER(PARTITION BY contact_id) AS has_trial
+  FROM marketing_touches
+),
+filtered AS (
+  SELECT
+    DISTINCT contact_id
+  FROM required
+  WHERE second_week = first_week + 1 AND third_week = first_week + 2 AND is_trial = 1
+)
+
+SELECT
+  cc.email
+FROM filtered f 
+INNER JOIN crm_contacts cc 
+ON f.contact_id = cc.contact_id;
