@@ -454,3 +454,29 @@ SELECT
   FLOOR((500000 - (SELECT prime_max_area FROM prime_area)) / not_prime_sum) * not_prime_cnt
 FROM aggregated;
 
+-- Q.21 https://datalemur.com/questions/updated-status
+"""
+  EXPLANATION:
+    - Well, this is categorised as HARD but I believe this is pretty easy question
+    - This concept I learnt from Zach while learning the GROWTH ACCOUNTING PATTERN
+    - The concept is simple, Check the previous and the current_state based on the metric, for this question, it was payment, in bootcamp, it was the number of users who are active
+    - So, the main thing here is, you apply CASE WHEN rules based on the state, this was provided in the question so was very easy
+    - But the main catch is you need to use FULL OUTER JOIN as there would be a data in the right table which would be a new user/new record
+    - Used the COALESCE to determine whether the record is from the left or right side of the table
+    - COALESCE WITH CASE WHEN was new but the idea is simple if the left table IS NULL, it indicates it's a new RECORD
+"""
+SELECT
+    COALESCE(a.user_id,dp.user_id),
+    COALESCE(CASE WHEN a.status = 'NEW' AND dp.paid IS NOT NULL THEN 'EXISTING'
+      WHEN a.status = 'NEW' AND dp.paid IS NULL THEN 'CHURN'
+      WHEN a.status = 'EXISTING' AND dp.paid IS NOT NULL THEN 'EXISTING'
+      WHEN a.status = 'EXISTING' AND dp.paid IS NULL THEN 'CHURN'
+      WHEN a.status = 'CHURN' AND dp.paid IS NOT NULL THEN 'RESURRECT'
+      WHEN a.status = 'CHURN' AND dp.paid IS NULL THEN 'CHURN'
+      WHEN a.status = 'RESURRECT' AND dp.paid IS NOT NULL THEN 'EXISTING'
+      WHEN a.status = 'RESURRECT' AND dp.paid IS NULL THEN 'CHURN'
+    END, 'NEW') AS new_status
+  FROM advertiser a 
+  FULL OUTER JOIN daily_pay dp 
+  ON a.user_id = dp.user_id
+ORDER BY 1;
