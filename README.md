@@ -65,6 +65,7 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 22 | [Updated Status](https://datalemur.com/questions/updated-status) | FULL OUTER JOIN, COALESCE, CASE WHEN, Growth Accounting |
 | 23 | [Consecutive Filing Years](https://datalemur.com/questions/consecutive-filing-years) | LEAD, Window Functions, LIKE, Consecutive Logic |
 | 24 | [Marketing Touch Streak](https://datalemur.com/questions/marketing-touch-streak) | LEAD, Window Functions, CASE WHEN, JOINs |
+| 25 | [Pizzas Topping Cost](https://datalemur.com/questions/pizzas-topping-cost) | Self Join, CONCAT, Combination Logic |
 
 ## Local SQL Testing
 

@@ -536,3 +536,29 @@ SELECT
 FROM filtered f 
 INNER JOIN crm_contacts cc 
 ON f.contact_id = cc.contact_id;
+
+-- Q.24 https://datalemur.com/questions/pizzas-topping-cost
+"""
+  EXPLANATION:
+    - The question is easy, the description made it look like it's straight from the other universe or atleast I felt like that
+    - The goal is to generate topping combinations without duplication so I created first CTE to generate two toppings and SELF joined the CTE to create the third topping
+    - Key point here is the JOIN condition, first_topping < second_topping  and second_topping < third_topping to achieve de-dedupe results
+    - Rest is simple, Concat the columns and sum the price as total price
+"""
+WITH two_toppings AS (
+  SELECT
+    pt1.topping_name AS t1,
+    pt2.topping_name AS t2,
+    pt1.ingredient_cost + pt2.ingredient_cost AS intermediate_cost
+  FROM pizza_toppings pt1
+  INNER JOIN pizza_toppings pt2
+    ON pt1.topping_name < pt2.topping_name
+)
+
+SELECT
+  CONCAT(t1, ',', t2, ',', pt3.topping_name) AS pizza,
+  intermediate_cost + pt3.ingredient_cost AS total_cost
+FROM two_toppings tt
+INNER JOIN pizza_toppings pt3
+  ON tt.t2 < pt3.topping_name
+ORDER BY total_cost DESC, pizza;
