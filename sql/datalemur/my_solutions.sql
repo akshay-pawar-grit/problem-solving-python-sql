@@ -562,3 +562,32 @@ FROM two_toppings tt
 INNER JOIN pizza_toppings pt3
   ON tt.t2 < pt3.topping_name
 ORDER BY total_cost DESC, pizza;
+
+-- Q.25 https://datalemur.com/questions/patient-call-history
+"""
+  EXPLANATION:
+    1. CONDITIONAL SELF JOIN - self-join on policy_holder_id and check the 7-day interval on call_date
+    2. USE LEAD FUNCTION - get the next call per policy_holder and filter based on the date difference
+"""
+/*
+  CONDITIONAL_SELF_JOIN_APPROACH
+SELECT
+  COUNT(DISTINCT c1.policy_holder_id) AS policy_holder_count
+FROM callers c1 
+INNER JOIN callers c2
+ON c1.policy_holder_id = c2.policy_holder_id AND
+c2.call_date::date - c1.call_date::date BETWEEN 1 AND 7;
+*/
+
+WITH calls AS (
+  SELECT 
+    policy_holder_id,
+    call_date::DATE AS first_call,
+    LEAD(call_date::DATE) OVER(PARTITION BY policy_holder_id ORDER BY call_date::DATE) AS next_call
+  FROM callers
+)
+
+SELECT
+  COUNT(DISTINCT policy_holder_id) AS policy_holder_count
+FROM calls
+WHERE next_call IS NOT NULL AND next_call - first_call BETWEEN 1 AND 7;

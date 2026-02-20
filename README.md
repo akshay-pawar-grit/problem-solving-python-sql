@@ -66,6 +66,7 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 23 | [Consecutive Filing Years](https://datalemur.com/questions/consecutive-filing-years) | LEAD, Window Functions, LIKE, Consecutive Logic |
 | 24 | [Marketing Touch Streak](https://datalemur.com/questions/marketing-touch-streak) | LEAD, Window Functions, CASE WHEN, JOINs |
 | 25 | [Pizzas Topping Cost](https://datalemur.com/questions/pizzas-topping-cost) | Self Join, CONCAT, Combination Logic |
+| 26 | [Patient Call History](https://datalemur.com/questions/patient-call-history) | LEAD, Window Functions, Self Join, Date Filtering |
 
 ## Local SQL Testing
 
