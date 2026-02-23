@@ -591,3 +591,19 @@ SELECT
   COUNT(DISTINCT policy_holder_id) AS policy_holder_count
 FROM calls
 WHERE next_call IS NOT NULL AND next_call - first_call BETWEEN 1 AND 7;
+
+-- Q.26 https://datalemur.com/questions/long-calls-growth
+WITH long_calls AS (
+  SELECT
+    EXTRACT(YEAR FROM call_date) AS yr,
+    EXTRACT(MONTH FROM call_date) AS mth,
+    SUM(CASE WHEN call_duration_secs > 300 THEN 1 ELSE 0 END) AS long_calls
+  FROM callers
+  GROUP BY 1,2
+)
+
+SELECT
+  yr,
+  mth,
+  ROUND(((long_calls - LAG(long_calls, 1) OVER(ORDER BY yr, mth))::NUMERIC / LAG(long_calls, 1) OVER(ORDER BY yr, mth)) * 100,1) AS prev_long_calls
+FROM long_calls;

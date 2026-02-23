@@ -67,6 +67,7 @@ Solutions to SQL problems from [DataLemur](https://datalemur.com/). Each query i
 | 24 | [Marketing Touch Streak](https://datalemur.com/questions/marketing-touch-streak) | LEAD, Window Functions, CASE WHEN, JOINs |
 | 25 | [Pizzas Topping Cost](https://datalemur.com/questions/pizzas-topping-cost) | Self Join, CONCAT, Combination Logic |
 | 26 | [Patient Call History](https://datalemur.com/questions/patient-call-history) | LEAD, Window Functions, Self Join, Date Filtering |
+| 27 | [Long Calls Growth](https://datalemur.com/questions/long-calls-growth) | LAG, Window Functions, EXTRACT, Conditional Aggregation, MoM Growth Rate |
 
 ## Local SQL Testing
 
