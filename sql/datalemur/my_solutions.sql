@@ -607,3 +607,27 @@ SELECT
   mth,
   ROUND(((long_calls - LAG(long_calls, 1) OVER(ORDER BY yr, mth))::NUMERIC / LAG(long_calls, 1) OVER(ORDER BY yr, mth)) * 100,1) AS prev_long_calls
 FROM long_calls;
+
+-- Q.27 https://datalemur.com/questions/repeated-payments
+/*
+SELECT
+  COUNT(t1.transaction_id) AS payment_count
+FROM transactions t1 
+INNER JOIN transactions t2
+  ON t1.merchant_id = t2.merchant_id AND
+    t1.credit_card_id = t2.credit_card_id AND 
+    t1.amount = t2.amount AND
+    t2.transaction_timestamp - t1.transaction_timestamp BETWEEN INTERVAL '1 MINUTE' AND '10 MINUTES';
+*/
+
+WITH next_transaction AS (
+  SELECT
+    transaction_id,
+    transaction_timestamp AS curr_tran,
+    LEAD(transaction_timestamp) OVER(PARTITION BY merchant_id, credit_card_id, amount ORDER BY transaction_timestamp) AS next_tran
+  FROM transactions
+)
+SELECT
+  COUNT(transaction_id) AS payment_count
+FROM next_transaction 
+WHERE next_tran - curr_tran <= INTERVAL '10 MINUTES';
